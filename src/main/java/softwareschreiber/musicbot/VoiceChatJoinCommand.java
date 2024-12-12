@@ -1,5 +1,6 @@
 package softwareschreiber.musicbot;
 
+import java.util.Locale;
 import java.util.Optional;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
@@ -24,24 +25,27 @@ import org.javacord.api.listener.interaction.MessageComponentCreateListener;
 import org.javacord.api.listener.message.MessageCreateListener;
 import org.tinylog.Logger;
 
-class MaggaCommand implements MessageCreateListener, MessageComponentCreateListener {
+class VoiceChatJoinCommand implements MessageCreateListener, MessageComponentCreateListener {
 	private static final String JA = "ja";
 	private static final String NEIN = "nein";
 	private final DiscordApi api;
 
-	MaggaCommand(DiscordApi api) {
+	VoiceChatJoinCommand(DiscordApi api) {
 		this.api = api;
 	}
 
 	@Override
 	public void onMessageCreate(MessageCreateEvent event) {
-		if (event.getMessageContent().equalsIgnoreCase("!join")) {
-			new MessageBuilder()
+		switch (event.getMessageContent().toLowerCase(Locale.ROOT)) {
+			case "!join":
+				new MessageBuilder()
 					.setContent("Soll ich dem Voicechat beitreten?")
 					.addComponents(ActionRow.of(
 							Button.success(JA, "Ja"),
 							Button.secondary(NEIN, "Nein")))
 					.send(event.getChannel());
+
+				break;
 		}
 	}
 
@@ -56,7 +60,7 @@ class MaggaCommand implements MessageCreateListener, MessageComponentCreateListe
 						.getConnectedVoiceChannel(messageComponentInteraction.getServer().get());
 
 				if (channel.isPresent()) {
-					channel.get().connect(false, false).thenAccept(this::audioConnection).exceptionally(e -> {
+					channel.get().connect().thenAccept(this::audioConnection).exceptionally(e -> {
 						Logger.error(e);
 						return null;
 					});
@@ -72,7 +76,6 @@ class MaggaCommand implements MessageCreateListener, MessageComponentCreateListe
 	}
 
 	private void audioConnection(AudioConnection audioConnection) {
-		// Create a player manager
 		AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
 		playerManager.registerSourceManager(SoundCloudAudioSourceManager.createDefault());
 		AudioPlayer player = playerManager.createPlayer();
@@ -81,8 +84,6 @@ class MaggaCommand implements MessageCreateListener, MessageComponentCreateListe
 		AudioSource source = new LavaplayerAudioSource(api, player);
 		audioConnection.setAudioSource(source);
 
-		// You can now use the AudioPlayer like you would normally do with Lavaplayer,
-		// e.g.,
 		playerManager.loadItem(
 				"https://soundcloud.com/user-487021794/ms-daisy?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
 				new AudioLoadResultHandler() {
@@ -100,12 +101,12 @@ class MaggaCommand implements MessageCreateListener, MessageComponentCreateListe
 
 					@Override
 					public void noMatches() {
-						// Notify the user that we've got nothing
+						Logger.warn("No playable songs found!");
 					}
 
 					@Override
 					public void loadFailed(FriendlyException throwable) {
-						// Notify the user that everything exploded
+						Logger.error(throwable);
 					}
 				});
 	}
