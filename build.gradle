@@ -51,6 +51,9 @@ repositories {
 
 dependencies {
 	compileOnly "org.jetbrains:annotations:${project.jetbrains_annotations_version}"
+	implementation "org.slf4j:slf4j-api:${slf4j_version}"
+	runtimeOnly "org.tinylog:slf4j-tinylog:${tinylog_version}"
+	runtimeOnly "org.tinylog:tinylog-impl:${tinylog_version}"
 
 	testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter_version}"
 	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
@@ -59,6 +62,10 @@ dependencies {
 
 application {
 	mainClass = "softwareschreiber.musicbot.Main"
+}
+
+jar {
+	processResources.exclude('tinylog-dev.properties')
 }
 
 test {
