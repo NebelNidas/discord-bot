@@ -9,6 +9,7 @@ import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceMan
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.audio.AudioConnection;
 import org.javacord.api.audio.AudioSource;
@@ -27,7 +28,6 @@ class VoiceChatJoinCommand implements MessageCreateListener {
 
 	@Override
 	public void onMessageCreate(MessageCreateEvent event) {
-
 		String messageContent = event.getMessageContent();
 
 		if (messageContent.startsWith("!play ")) {
@@ -38,7 +38,7 @@ class VoiceChatJoinCommand implements MessageCreateListener {
 			serverVoiceChannel = event.getMessageAuthor().getConnectedVoiceChannel().get();
 			String url = event.getMessageContent().substring(6);
 			serverVoiceChannel.connect().thenAccept(audioConnection -> playAudio(audioConnection, url));
-		}else if(event.getMessageContent().equalsIgnoreCase("!stop")) {
+		} else if (event.getMessageContent().equalsIgnoreCase("!stop")) {
 			serverVoiceChannel.disconnect().join();
 		}
 	}
@@ -46,7 +46,9 @@ class VoiceChatJoinCommand implements MessageCreateListener {
 	private void playAudio(AudioConnection audioConnection, String link) {
 		AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
 		playerManager.registerSourceManager(SoundCloudAudioSourceManager.createDefault());
+		playerManager.registerSourceManager(new YoutubeAudioSourceManager());
 		playerManager.registerSourceManager(new TwitchStreamAudioSourceManager());
+
 		AudioPlayer player = playerManager.createPlayer();
 
 		// Create an audio source and add it to the audio connection's queue

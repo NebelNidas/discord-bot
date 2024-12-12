@@ -48,16 +48,18 @@ java {
 repositories {
 	mavenCentral()
 	maven { url "https://jitpack.io" }
+	maven { url "https://maven.lavalink.dev/releases" }
 }
 
 dependencies {
 	compileOnly "org.jetbrains:annotations:${project.jetbrains_annotations_version}"
+	implementation "org.apache.logging.log4j:log4j-to-slf4j:${log4j_version}"
 	runtimeOnly "org.tinylog:slf4j-tinylog:${tinylog_version}"
 	runtimeOnly "org.tinylog:tinylog-impl:${tinylog_version}"
 	implementation "org.tinylog:tinylog-api:${tinylog_version}"
 	implementation "org.javacord:javacord:${javacord_version}"
-	implementation "org.apache.logging.log4j:log4j-to-slf4j:${log4j_version}"
 	implementation "dev.arbjerg:lavaplayer:${lavaplayer_version}"
+	implementation "dev.lavalink.youtube:v2:${lavalink_youtube_version}"
 
 	testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter_version}"
 	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
