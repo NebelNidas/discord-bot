@@ -19,8 +19,8 @@ public class Main {
 
 		// Add listeners
 		api.addMessageCreateListener(new UserInfoCommand());
-		api.addMessageCreateListener(new MaggaCommand());
-		api.addMessageComponentCreateListener(new MaggaCommand());
+		api.addMessageCreateListener(new MaggaCommand(api));
+		api.addMessageComponentCreateListener(new MaggaCommand(api));
 
 		// Log a message, if the bot joined or left a server
 		api.addServerJoinListener(event -> Logger.info("Joined server " + event.getServer().getName()));
