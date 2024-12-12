@@ -23,7 +23,6 @@ public class Main {
 
 		api.addMessageCreateListener(new UserInfoCommand());
 		api.addMessageCreateListener(new VoiceChatJoinCommand(api));
-		api.addMessageComponentCreateListener(new VoiceChatJoinCommand(api));
 
 		api.addServerJoinListener(event -> Logger.info("Joined server " + event.getServer().getName()));
 		api.addServerLeaveListener(event -> Logger.info("Left server " + event.getServer().getName()));
