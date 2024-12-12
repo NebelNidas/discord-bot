@@ -7,8 +7,12 @@ import org.tinylog.Logger;
 
 public class Main {
 	public static void main(String[] args) {
-		String token = "MTMxNjU1ODQ1MzU4NTQ3NzcyMw.Ge6hDr.4vFsZqJNHR9zL86pXhX71Y2Qc3D-xAsCgsVWZE";
+		if (args.length != 1) {
+			Logger.error("Please provide exactly one argument: the bot token");
+			return;
+		}
 
+		String token = args[0];
 		DiscordApi api = new DiscordApiBuilder()
 				.setToken(token)
 				.setIntents(
