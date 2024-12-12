@@ -54,10 +54,11 @@ dependencies {
 	implementation "org.slf4j:slf4j-api:${slf4j_version}"
 	runtimeOnly "org.tinylog:slf4j-tinylog:${tinylog_version}"
 	runtimeOnly "org.tinylog:tinylog-impl:${tinylog_version}"
-
+	implementation "org.javacord:javacord:${javacord_version}"
+	
 	testImplementation "org.junit.jupiter:junit-jupiter:${junit_jupiter_version}"
 	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
-	testCompileOnly "org.jetbrains:annotations:${project.jetbrains_annotations_version}"
+	testCompileOnly "org.jetbrains:annotations:${jetbrains_annotations_version}"
 }
 
 application {
