@@ -21,7 +21,6 @@ public class Main {
 
 		Logger.info("You can invite me by using the following url: " + api.createBotInvite());
 
-		api.addMessageCreateListener(new UserInfoCommand());
 		api.addMessageCreateListener(new VoiceChatJoinCommand(api));
 
 		api.addServerJoinListener(event -> Logger.info("Joined server " + event.getServer().getName()));
