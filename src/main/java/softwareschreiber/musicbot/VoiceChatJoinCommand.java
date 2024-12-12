@@ -22,6 +22,7 @@ import org.tinylog.Logger;
 class VoiceChatJoinCommand implements MessageCreateListener {
 	private final DiscordApi api;
 	private ServerVoiceChannel serverVoiceChannel;
+	private static final String playCommand = "!play";
 
 	VoiceChatJoinCommand(DiscordApi api) {
 		this.api = api;
@@ -31,16 +32,22 @@ class VoiceChatJoinCommand implements MessageCreateListener {
 	public void onMessageCreate(MessageCreateEvent event) {
 		String messageContent = event.getMessageContent();
 
-		if (messageContent.startsWith("!play ")) {
-			if (messageContent.length() <= 7) {
+		if (messageContent.startsWith(playCommand)) {
+			if (messageContent.length() <= playCommand.length() + 1) {
 				event.getChannel().sendMessage("!play muss mit einem Link zusammen geschickt werden");
+				return;
 			}
 
 			serverVoiceChannel = event.getMessageAuthor().getConnectedVoiceChannel().get();
-			String url = event.getMessageContent().substring(6);
+			String url = event.getMessageContent().substring(playCommand.length() + 1);
 			serverVoiceChannel.connect().thenAccept(audioConnection -> playAudio(audioConnection, url));
 		} else if (event.getMessageContent().equalsIgnoreCase("!stop")) {
-			serverVoiceChannel.disconnect().join();
+			if (serverVoiceChannel != null) {
+				serverVoiceChannel.disconnect().join();
+				serverVoiceChannel = null;
+			} else {
+				event.getChannel().sendMessage("Kann nichts stoppen was schon gestoppt ist");
+			}
 		}
 	}
 
