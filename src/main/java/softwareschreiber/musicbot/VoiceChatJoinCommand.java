@@ -5,19 +5,21 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.twitch.TwitchStreamAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.audio.AudioConnection;
 import org.javacord.api.audio.AudioSource;
+import org.javacord.api.entity.channel.ServerVoiceChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 import org.tinylog.Logger;
 
 class VoiceChatJoinCommand implements MessageCreateListener {
 	private final DiscordApi api;
+	private ServerVoiceChannel serverVoiceChannel;
 
 	VoiceChatJoinCommand(DiscordApi api) {
 		this.api = api;
@@ -25,6 +27,7 @@ class VoiceChatJoinCommand implements MessageCreateListener {
 
 	@Override
 	public void onMessageCreate(MessageCreateEvent event) {
+
 		String messageContent = event.getMessageContent();
 
 		if (messageContent.startsWith("!play ")) {
@@ -32,15 +35,18 @@ class VoiceChatJoinCommand implements MessageCreateListener {
 				event.getChannel().sendMessage("!play muss mit einem Link zusammen geschickt werden");
 			}
 
+			serverVoiceChannel = event.getMessageAuthor().getConnectedVoiceChannel().get();
 			String url = event.getMessageContent().substring(6);
-			event.getMessageAuthor().getConnectedVoiceChannel().get().connect().thenAccept(audioConnection -> playAudio(audioConnection, url));
+			serverVoiceChannel.connect().thenAccept(audioConnection -> playAudio(audioConnection, url));
+		}else if(event.getMessageContent().equalsIgnoreCase("!stop")) {
+			serverVoiceChannel.disconnect().join();
 		}
 	}
 
 	private void playAudio(AudioConnection audioConnection, String link) {
 		AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
 		playerManager.registerSourceManager(SoundCloudAudioSourceManager.createDefault());
-		playerManager.registerSourceManager(new YoutubeAudioSourceManager());
+		playerManager.registerSourceManager(new TwitchStreamAudioSourceManager());
 		AudioPlayer player = playerManager.createPlayer();
 
 		// Create an audio source and add it to the audio connection's queue
