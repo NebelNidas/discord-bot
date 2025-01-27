@@ -25,13 +25,13 @@ class VoiceChatJoinCommand implements MessageCreateListener {
 	private static final String playCommand = "!play";
 	private static final String thorsten = "Thorsten";
 	private static final String[] thorstenMessages = new String[] {
-		"Hab ich da meinen Namen gehört ?",
-		"Der einzig wahre Magga",
-		"Willkommen zum besten Fach der Welt",
-		"Spaß bei Seite jetzt!",
-		"Ich werd euch so richtig durchnehmen",
-		"Wurden sie nicht besser erzogen?",
-		"Für Bonuspunkte, bitte nach der Stunde zu mir..."
+			"Hab ich da meinen Namen gehört ?",
+			"Der einzig wahre Magga hims",
+			"Willkommen zum besten Fach der Welt",
+			"Spaß bei Seite jetzt!",
+			"Ich werd euch so richtig durchnehmen",
+			"Wurden sie nicht besser erzogen?",
+			"Für Bonuspunkte, bitte nach der Stunde zu mir..."
 	};
 
 	VoiceChatJoinCommand(DiscordApi api) {
@@ -58,8 +58,9 @@ class VoiceChatJoinCommand implements MessageCreateListener {
 			} else {
 				event.getChannel().sendMessage("Kann nichts stoppen was schon gestoppt ist");
 			}
-		} else if (messageContent.equalsIgnoreCase(thorsten)){
-			event.getChannel().sendMessage(thorstenMessages[(int) Math.round(Math.random()*(thorstenMessages.length - 1))]);
+		} else if (messageContent.equalsIgnoreCase(thorsten)) {
+			event.getChannel()
+					.sendMessage(thorstenMessages[(int) Math.round(Math.random() * (thorstenMessages.length - 1))]);
 			return;
 		}
 	}
