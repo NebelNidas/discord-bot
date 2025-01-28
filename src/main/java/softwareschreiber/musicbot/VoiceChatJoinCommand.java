@@ -32,7 +32,7 @@ class VoiceChatJoinCommand implements MessageCreateListener {
 			"Willkommen zum besten Fach der Welt",
 			"Spaß bei Seite jetzt!",
 			"Ich werd euch so richtig durchnehmen",
-			"Wurden sie nicht besser erzogen?",
+			"Wurden Sie nicht besser erzogen?",
 			"Für Bonuspunkte, bitte nach der Stunde zu mir...",
 			"Habt ihr mich vermisst?"
 	};
