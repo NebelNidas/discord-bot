@@ -11,6 +11,9 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import dev.lavalink.youtube.YoutubeAudioSourceManager;
+
+import java.util.Locale;
+
 import org.javacord.api.DiscordApi;
 import org.javacord.api.audio.AudioConnection;
 import org.javacord.api.audio.AudioSource;
@@ -23,17 +26,16 @@ class VoiceChatJoinCommand implements MessageCreateListener {
 	private final DiscordApi api;
 	private ServerVoiceChannel serverVoiceChannel;
 	private static final String playCommand = "!play";
-	private static final String thorsten = "Thorsten";
-	private static final String thorsten2 = "thorsten";
+	private static final String thorsten = "thorsten";
 	private static final String[] thorstenMessages = new String[] {
-			"Hab ich da meinen Namen gehört ?",
+			"Hab ich da meinen Namen gehört?",
 			"Der einzig wahre Magga himself",
 			"Willkommen zum besten Fach der Welt",
 			"Spaß bei Seite jetzt!",
 			"Ich werd euch so richtig durchnehmen",
 			"Wurden sie nicht besser erzogen?",
 			"Für Bonuspunkte, bitte nach der Stunde zu mir...",
-			"Habt ihr mich vermisst ?"
+			"Habt ihr mich vermisst?"
 	};
 
 	VoiceChatJoinCommand(DiscordApi api) {
@@ -60,7 +62,7 @@ class VoiceChatJoinCommand implements MessageCreateListener {
 			} else {
 				event.getChannel().sendMessage("Kann nichts stoppen was schon gestoppt ist");
 			}
-		} else if (messageContent.contains(thorsten) || messageContent.contains(thorsten2)) {
+		} else if (messageContent.toLowerCase(Locale.ROOT).contains(thorsten)) {
 			event.getChannel()
 					.sendMessage(thorstenMessages[(int) Math.round(Math.random() * (thorstenMessages.length - 1))]);
 			return;
